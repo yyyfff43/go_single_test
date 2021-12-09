@@ -38,6 +38,37 @@ fmt.Println(a, *b)
 [1 3 3] [1 3 3]
 这表明b=&a赋值语句是数组内容的引用。变量b的类型不是[3]int，而是*[3]int类型
 */
+
+//声明一个叫做Rect的结构体
+type Rect struct {
+	x, y float64
+	width, height float64
+}
+//添加一个Rect的成员方法
+func (r *Rect) Area() float64 {
+	return r.width * r.height
+}
+
+
 func main (){
 	fmt.Println("测试结构体")
+	//实例化Rect的对象，一共四种
+	rect1 := new(Rect)
+	rect2 := &Rect{}
+	rect3 := &Rect{0, 0, 50, 100}
+	rect4 := &Rect{width: 100, height: 200}
+
+	fmt.Println("第一种声明调用Area方法为：%f",rect1.Area())
+	fmt.Println("第二种声明调用Area方法为：%f",rect2.Area())
+	fmt.Println("第三种声明调用Area方法为：%f",rect3.Area())
+	fmt.Println("第四种声明调用Area方法为：%f",rect4.Area())
+
+	/*
+	在Go语言中，未进行显式初始化的变量都会被初始化为该类型的零值，例如bool类型的零
+    值为false，int类型的零值为0，string类型的零值为空字符串。
+    在Go语言中没有构造函数的概念，对象的创建通常交由一个全局的创建函数来完成，以NewXXX来命名，表示“构造函数”：
+    func NewRect(x, y, width, height float64) *Rect {
+          return &Rect{x, y, width, height}
+	}
+	 */
 }

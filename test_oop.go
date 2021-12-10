@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"strconv"
+)
 /*结构体：
 func (a *Integer) Add(b Integer) {
 	*a += b
@@ -49,6 +52,28 @@ func (r *Rect) Area() float64 {
 	return r.width * r.height
 }
 
+//声明一个数学算是接口
+type IShuXue interface {
+	JiaFa(x int, y int) (str_sum string, err error)
+}
+
+//声明第一个结构体实现数学接口,实现正整数相加
+type ShiXianJiaFa struct {
+
+}
+
+func (s *ShiXianJiaFa) JiaFa(x int, y int) (str_sum string, err error){
+	return "这是第一个实现数学接口方法的结构体,正整数相加结果为"+strconv.Itoa(x+y), nil
+}
+
+//声明第二个结构体实现数学接口,实现负整数相加
+type ShiXianJiaFa_2 struct {
+
+}
+
+func (s *ShiXianJiaFa_2) JiaFa(x int, y int) (str_sum string, err error){
+	return "这是第二个实现数学接口方法的结构体,负整数相加结果为"+strconv.Itoa(-x + -y), nil
+}
 
 func main (){
 	fmt.Println("测试结构体")
@@ -71,6 +96,14 @@ func main (){
           return &Rect{x, y, width, height}
 	}
 	 */
+
+	 //接口学习开始:
+	 //第一种接口实现，实现正数相加
+     var sxjf IShuXue = new(ShiXianJiaFa)
+     fmt.Println(sxjf.JiaFa(1,2))
+     //第二种接口实现，实现负数相加
+	 var sxjf_2 IShuXue = new(ShiXianJiaFa_2)
+	 fmt.Println(sxjf_2.JiaFa(1,2))
 }
 
 /*

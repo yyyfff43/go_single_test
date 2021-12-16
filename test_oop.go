@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strconv"
 )
+
 /*结构体：
 func (a *Integer) Add(b Integer) {
 	*a += b
@@ -44,38 +45,42 @@ fmt.Println(a, *b)
 
 //声明一个叫做Rect的结构体
 type Rect struct {
-	x, y float64
+	x, y          float64
 	width, height float64
 }
+
 //添加一个Rect的成员方法
 func (r *Rect) Area() float64 {
 	return r.width * r.height
 }
 
-//声明一个数学算是接口
+//声明一个数学算式接口
 type IShuXue interface {
 	JiaFa(x int, y int) (str_sum string, err error)
 }
 
-//声明第一个结构体实现数学接口,实现正整数相加
-type ShiXianJiaFa struct {
-
+//声明一个计算器接口，包含加减乘除四种方法
+type Icounter interface {
+	Area() (str_sum float64)
 }
 
-func (s *ShiXianJiaFa) JiaFa(x int, y int) (str_sum string, err error){
-	return "这是第一个实现数学接口方法的结构体,正整数相加结果为"+strconv.Itoa(x+y), nil
+//声明第一个结构体实现数学接口,实现正整数相加
+type ShiXianJiaFa struct {
+}
+
+func (s *ShiXianJiaFa) JiaFa(x int, y int) (str_sum string, err error) {
+	return "这是第一个实现数学接口方法的结构体,正整数相加结果为" + strconv.Itoa(x+y), nil
 }
 
 //声明第二个结构体实现数学接口,实现负整数相加
 type ShiXianJiaFa_2 struct {
-
 }
 
-func (s *ShiXianJiaFa_2) JiaFa(x int, y int) (str_sum string, err error){
-	return "这是第二个实现数学接口方法的结构体,负整数相加结果为"+strconv.Itoa(-x + -y), nil
+func (s *ShiXianJiaFa_2) JiaFa(x int, y int) (str_sum string, err error) {
+	return "这是第二个实现数学接口方法的结构体,负整数相加结果为" + strconv.Itoa(-x+-y), nil
 }
 
-func main (){
+func main() {
 	fmt.Println("测试结构体")
 	//实例化Rect的对象，一共四种
 	rect1 := new(Rect)
@@ -83,27 +88,40 @@ func main (){
 	rect3 := &Rect{0, 0, 50, 100}
 	rect4 := &Rect{width: 100, height: 200}
 
-	fmt.Println("第一种声明调用Area方法为：%f",rect1.Area())
-	fmt.Println("第二种声明调用Area方法为：%f",rect2.Area())
-	fmt.Println("第三种声明调用Area方法为：%f",rect3.Area())
-	fmt.Println("第四种声明调用Area方法为：%f",rect4.Area())
+	fmt.Println("第一种声明调用Area方法为：%f", rect1.Area())
+	fmt.Println("第二种声明调用Area方法为：%f", rect2.Area())
+	fmt.Println("第三种声明调用Area方法为：%f", rect3.Area())
+	fmt.Println("第四种声明调用Area方法为：%f", rect4.Area())
 
 	/*
-	在Go语言中，未进行显式初始化的变量都会被初始化为该类型的零值，例如bool类型的零
-    值为false，int类型的零值为0，string类型的零值为空字符串。
-    在Go语言中没有构造函数的概念，对象的创建通常交由一个全局的创建函数来完成，以NewXXX来命名，表示“构造函数”：
-    func NewRect(x, y, width, height float64) *Rect {
-          return &Rect{x, y, width, height}
-	}
-	 */
+		在Go语言中，未进行显式初始化的变量都会被初始化为该类型的零值，例如bool类型的零
+	    值为false，int类型的零值为0，string类型的零值为空字符串。
+	    在Go语言中没有构造函数的概念，对象的创建通常交由一个全局的创建函数来完成，以NewXXX来命名，表示“构造函数”：
+	    func NewRect(x, y, width, height float64) *Rect {
+	          return &Rect{x, y, width, height}
+		}
+	*/
 
-	 //接口学习开始:
-	 //第一种接口实现，实现正数相加
-     var sxjf IShuXue = new(ShiXianJiaFa)
-     fmt.Println(sxjf.JiaFa(1,2))
-     //第二种接口实现，实现负数相加
-	 var sxjf_2 IShuXue = new(ShiXianJiaFa_2)
-	 fmt.Println(sxjf_2.JiaFa(1,2))
+	//接口学习开始:
+	//第一种接口实现，实现正数相加
+	var sxjf IShuXue = new(ShiXianJiaFa)
+	fmt.Println(sxjf.JiaFa(1, 2))
+	//第二种接口实现，实现负数相加
+	var sxjf_2 IShuXue = new(ShiXianJiaFa_2)
+	fmt.Println(sxjf_2.JiaFa(1, 2))
+
+//	var sxjf_3 Icounter
+
+	//接口查询，判断作为IShuXue接口的对象sxjf是否实现了Icounter接口中的所有方法，如果实现了就把sxjf赋给sxjf_3
+	if sxjf_3, ok := sxjf.(Icounter); ok {
+		fmt.Println("IShuXue实现了Icounter的所有方法")
+		fmt.Println(sxjf_3.Area())//实际sxjf中没有实现Area方法
+	} else {
+		fmt.Println("IShuXue没有实现Icounter的全部方法")
+	}
+
+
+
 }
 
 /*
@@ -141,4 +159,22 @@ var file2 IReader = new(File)
 var file3 IWriter = new(File)
 var file4 ICloser = new(File)
 (如果有另外的File2类等实现了这些同名接口但不同方法内部的功能，均可以赋值给这些对象，实现接口的多钟实例化)
+*/
+
+/*
+ 接口赋值：
+ 在Go语言中，只要两个接口拥有相同的方法列表（次序不同不要紧），那么它们就是等同的，可以相互赋值。
+ 实现了接口的对象实例赋值给接口时，一定要实现了大于等于此接口的方法数量，且结构体参数要传引用，做为指针类型传递
+
+ 接口组合：
+ // ReadWriter接口将基本的Read和Write方法组合起来,例：
+type ReadWriter interface {
+ Reader
+ Writer
+}
+ ReadWriter接口包含了Reader和Writer两个接口，实现ReadWriter接口需被实现了之前那两个接口内部的方法的对象赋值
+*/
+
+/*
+接口查询：见main函数中的实例
  */

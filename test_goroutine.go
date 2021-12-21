@@ -118,6 +118,58 @@ func main() {
 	 x, ok := <-ch
 	 这个用法与map中的按键获取value的过程比较类似，只需要看第二个bool返回值即可，如
 	 果返回值是false则表示ch已经被关闭。
-	  */
 
+	 多核调用：
+	 goroutine是通过直接设置环境变量GOMAXPROCS的值，或者在代码中启动goroutine之前先调用以下这个语句以设置使用16个CPU核心：
+        runtime.GOMAXPROCS(16)
+	 到底应该设置多少个CPU核心呢，其实runtime包中还提供了另外一个函数NumCPU()来获取核心数
+	 后续go版本会陆续抛弃GOMAXPROCS然后自行决定如何分配多核
+
+	 可以在每个goroutine中控制何时主动出让时间片给其他goroutine，这可以使用runtime
+包中的Gosched()函数实现
+*/
+
+
+/*
+	 锁的类型Mutex和RWMutex，RWMutex相对友好些，是经典的单写多读模型。在读锁占用的情
+况下，会阻止写，但不阻止读，也就是多个goroutine可同时获取读锁（调用RLock()方法；而写
+锁（调用Lock()方法）会阻止任何其他goroutine（无论读和写）进来，整个锁相当于由该goroutine
+独占。
+	 对于这两种锁类型，任何一个Lock()或RLock()均需要保证对应有Unlock()或RUnlock()
+调用与之对应，否则可能导致等待该锁的所有goroutine处于饥饿状态，甚至可能导致死锁。锁的
+典型使用模式如下：
+	var l sync.Mutex
+	func foo() {
+	 l.Lock()
+	 defer l.Unlock()
+	 //...
 	}
+	 调用foo时，如果不能保证在程序末尾执行关闭l.Unlock()，那么最好开头用defer声明
+*/
+
+/*
+	对于从全局的角度只需要运行一次的代码，比如全局初始化操作，Go语言提供了一个Once
+	类型来保证全局的唯一性操作
+
+	var a string
+	var once sync.Once
+	func setup() {
+		a = "hello, world"
+	}
+	func doprint() {
+		once.Do(setup)
+		print(a)
+	}
+	func twoprint() {
+		go doprint()
+		go doprint()
+	}
+once的Do()方法可以保证在全局范围内只调用指定的函数一次（这里指setup()函数），而且所有其他goroutine在调用到此语句时，将会先被阻塞，直至全局唯一的
+once.Do()调用结束后才继续。
+
+为了更好地控制并行中的原子性操作，sync包中还包含一个atomic子包，它提供了对于一
+些基础数据类型的原子操作函数
+*/
+
+
+}

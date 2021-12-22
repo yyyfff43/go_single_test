@@ -157,7 +157,7 @@ func main() {
 		a = "hello, world"
 	}
 	func doprint() {
-		once.Do(setup)
+		once.Do(setup) //在这个可能被同时执行多次的方法内声明once
 		print(a)
 	}
 	func twoprint() {
@@ -165,7 +165,7 @@ func main() {
 		go doprint()
 	}
 once的Do()方法可以保证在全局范围内只调用指定的函数一次（这里指setup()函数），而且所有其他goroutine在调用到此语句时，将会先被阻塞，直至全局唯一的
-once.Do()调用结束后才继续。
+once.Do()调用结束后才继续，达到单例效果。
 
 为了更好地控制并行中的原子性操作，sync包中还包含一个atomic子包，它提供了对于一
 些基础数据类型的原子操作函数

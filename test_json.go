@@ -22,7 +22,7 @@ func main() {
 
     gobook := new(Book)
 	gobook = &Book{"Go语言编程",
-		[]string{"XuShiwei", "HughLv", "Pandaman", "GuaguaSong", "HanTuo", "BertYuan", "XuDaoli"},
+		[]string{"zhangsan", "lisi", "wangwu", "zhaoliu", "liubei", "guanyu", "zhangfei"},
 		"ituring.com.cn",
 		true,
 		9.99,

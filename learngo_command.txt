@@ -10,3 +10,9 @@ go doc foo
 godoc -http=:76 -path="."
 然后再访问http://localhost:76/，单击顶部的foo链接，或者直接访问http://localhost:76/pkg/foo/ ,
 就可以看到注释提取的效果
+
+
+go env 查询当前go配置的环境变量
+
+
+set GOPATH=D:\yf_github\go_test_project;C:\Users\win10\go   修改go预设值，此处是修改GOPATH

@@ -19,15 +19,28 @@ func main() {
 	fmt.Printf("%x \n", c)  // ff
 	fmt.Printf("%X \n", c)  // FF
 
-	//字符串遍历
-	str := "Hello,世界"
-	fmt.Println(string(str[0]))
-	n := len(str)
-	for i := 0; i < n; i++ {
-		ch := str[i] // 依据下标取字符串中的字符，类型为byte，go语言里的ch实际为rune类型
-		fmt.Println(i, ch)
+	//字符串遍历 %v打印二进制变量
+    s := "hello 天坛西里"
+    for i := 0; i < len(s); i++ { //byte
+			fmt.Printf("%v(%c) ", s[i], s[i])
 	}
-	fmt.Println("如果遍历字符串每个元素，打出的是字节数")
+	fmt.Println()
+	for _, r := range s { //rune
+			fmt.Printf("%v(%c) ", r, r)
+	}
+	fmt.Println()
+
+	s1 := "big"
+	// 强制类型转换
+	byteS1 := []byte(s1)
+	byteS1[0] = 'p'
+	fmt.Println(string(byteS1))
+
+	s2 := "白萝卜"
+	runeS2 := []rune(s2)
+	runeS2[0] = '红'
+	fmt.Println(string(runeS2))
+
 
 	//数组切片
 	mySlice := make([]int, 5, 10) //创建一个默认元素都是0的，5个数组元素的，容量为10的切片

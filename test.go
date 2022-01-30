@@ -41,6 +41,16 @@ func main() {
 	runeS2[0] = '红'
 	fmt.Println(string(runeS2))
 
+	//条件语句switch可以在一个case例判断多个值条件，英文逗号分割
+	switch n := 7; n {
+	case 1, 3, 5, 7, 9:
+		fmt.Println("奇数")
+	case 2, 4, 6, 8:
+		fmt.Println("偶数")
+	default:
+		fmt.Println(n)
+	}
+
 
 	//数组切片
 	mySlice := make([]int, 5, 10) //创建一个默认元素都是0的，5个数组元素的，容量为10的切片
